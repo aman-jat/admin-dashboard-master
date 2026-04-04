@@ -16,6 +16,7 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import GroupIcon from '@mui/icons-material/Group';
 import InsightsIcon from '@mui/icons-material/Insights';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -29,6 +30,11 @@ const navItems = [
     label: 'Analytics',
     icon: <InsightsIcon fontSize='small' />,
     href: '/analytics/product-performance',
+  },
+  {
+    label: 'Sales',
+    icon: <TrendingUpIcon fontSize='small' />,
+    href: '/analytics/sales',
   },
   {
     label: 'Customers',

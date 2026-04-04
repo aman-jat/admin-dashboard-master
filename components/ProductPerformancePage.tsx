@@ -38,6 +38,7 @@ import {
   CartesianGrid,
   Cell,
 } from 'recharts';
+import { useTheme } from '@mui/material/styles';
 
 const categoryData = [
   { name: 'Western', value: 4.2, label: '₹4.2M', pct: 100 },
@@ -99,11 +100,18 @@ const analyticsData = {
 };
 
 const top5ProductsData = [
-  { name: 'Midnight Crimson Lehenga', revenue: 1240 },
-  { name: 'Rose Quartz Silk Saree', revenue: 945 },
-  { name: 'Temple Gold Jhumkas', revenue: 562 },
-  { name: 'Emerald Green Anarkali', revenue: 423 },
-  { name: 'Ruby Red Bridal Set', revenue: 389 },
+  { id: 'AP-LHG-001', name: 'Midnight Crimson Lehenga', revenue: 1240 },
+  { id: 'AP-SAR-224', name: 'Rose Quartz Silk Saree', revenue: 945 },
+  { id: 'AP-JW-412', name: 'Temple Gold Jhumkas', revenue: 562 },
+  { id: 'AP-ANK-311', name: 'Emerald Green Anarkali', revenue: 423 },
+  { id: 'AP-RBY-725', name: 'Ruby Red Bridal Set', revenue: 389 },
+];
+
+const acquisitionData = [
+  { week: 'Week 1', new: 320, returning: 180 },
+  { week: 'Week 2', new: 280, returning: 240 },
+  { week: 'Week 3', new: 410, returning: 200 },
+  { week: 'Week 4', new: 360, returning: 310 },
 ];
 
 const statusColors: Record<
@@ -135,6 +143,7 @@ function StarRating({ count, max = 5 }: { count: number; max?: number }) {
 }
 
 export default function ProductPerformancePage() {
+  const theme = useTheme();
   return (
     <Box sx={{ p: { xs: 2, md: 3.5 } }}>
       {/* Header */}
@@ -312,7 +321,7 @@ export default function ProductPerformancePage() {
 
       <Grid container spacing={2.5}>
         {/* Category Breakdown Card */}
-        <Grid size={{ xs: 12, md: 7 }}>
+        <Grid size={{ xs: 12, md: 5 }}>
           <Card>
             <CardContent sx={{ p: 3 }}>
               <Box
@@ -346,7 +355,7 @@ export default function ProductPerformancePage() {
                       stroke='#F0F0F0'
                     />
                     <XAxis
-                      dataKey='name'
+                      dataKey='id'
                       tick={{ fontSize: 12, fill: '#64748B' }}
                       axisLine={false}
                       tickLine={false}
@@ -374,14 +383,14 @@ export default function ProductPerformancePage() {
                           key={idx}
                           fill={
                             idx === 0
-                              ? '#B91C1C'
+                              ? theme.palette.primary['900']
                               : idx === 1
-                                ? '#DC2626'
+                                ? theme.palette.primary['600']
                                 : idx === 2
-                                  ? '#EF4444'
+                                  ? theme.palette.primary['400']
                                   : idx === 3
-                                    ? '#F87171'
-                                    : '#FCA5A5'
+                                    ? theme.palette.primary['200']
+                                    : theme.palette.primary['50']
                           }
                         />
                       ))}
@@ -393,8 +402,97 @@ export default function ProductPerformancePage() {
           </Card>
         </Grid>
 
+        {/* Acquisition vs Retention */}
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Card>
+            <CardContent sx={{ p: 3 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 2.5,
+                }}>
+                <Typography variant='h6' fontWeight={600}>
+                  Acquisition vs. Retention
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: '50%',
+                        bgcolor: 'primary.main',
+                      }}
+                    />
+                    <Typography variant='caption'>New</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: '50%',
+                        bgcolor: '#FECACA',
+                      }}
+                    />
+                    <Typography variant='caption'>Returning</Typography>
+                  </Box>
+                </Box>
+              </Box>
+
+              <Box sx={{ height: 250 }}>
+                <ResponsiveContainer width='100%' height='100%'>
+                  <BarChart
+                    data={acquisitionData}
+                    barSize={18}
+                    barGap={8}
+                    margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+                    <CartesianGrid
+                      strokeDasharray='3 3'
+                      vertical={false}
+                      stroke='#F0F0F0'
+                    />
+                    <XAxis
+                      dataKey='week'
+                      tick={{ fontSize: 11, fill: '#64748B' }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      tick={{ fontSize: 11, fill: '#64748B' }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <RechartTooltip
+                      contentStyle={{
+                        borderRadius: 8,
+                        border: '1px solid #E5E7EB',
+                        fontSize: 12,
+                      }}
+                    />
+                    <Bar
+                      dataKey='new'
+                      fill={theme.palette.primary.main}
+                      radius={[3, 3, 0, 0]}
+                      name='New'
+                    />
+                    <Bar
+                      dataKey='returning'
+                      fill={theme.palette.primary['50']}
+                      radius={[3, 3, 0, 0]}
+                      name='Returning'
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
         {/* Restock Required */}
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Card sx={{ height: '100%' }}>
             <CardContent sx={{ p: 3 }}>
               <Box
@@ -416,9 +514,8 @@ export default function ProductPerformancePage() {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       p: 1.5,
-                      bgcolor: '#FEF2F2',
+                      bgcolor: 'primary.50',
                       borderRadius: 2,
-                      border: '1px solid #FECACA',
                     }}>
                     <Box
                       sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -427,7 +524,7 @@ export default function ProductPerformancePage() {
                           width: 38,
                           height: 38,
                           borderRadius: 1.5,
-                          bgcolor: '#B91C1C',
+                          bgcolor: 'primary.main',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
